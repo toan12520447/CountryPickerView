@@ -32,7 +32,7 @@ public class CountryPickerViewController: UITableViewController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.view.backgroundColor = UIColor.black
         prepareTableItems()
         prepareNavItem()
         prepareSearchBar()
@@ -96,7 +96,12 @@ extension CountryPickerViewController {
         searchController?.definesPresentationContext = true
         searchController?.searchBar.delegate = self
         searchController?.delegate = self
-
+        searchController?.searchBar.barTintColor = .black
+        if #available(iOS 13.0, *) {
+            searchController?.searchBar.searchTextField.textColor = .white
+        } else {
+            // Fallback on earlier versions
+        }
         switch searchBarPosition {
         case .tableViewHeader: tableView.tableHeaderView = searchController?.searchBar
         case .navigationBar: navigationItem.titleView = searchController?.searchBar
@@ -149,6 +154,7 @@ extension CountryPickerViewController {
         if let color = dataSource.cellLabelColor {
             cell.textLabel?.textColor = color
         }
+        cell.textLabel?.textColor = UIColor.white
         cell.accessoryType = country == countryPickerView.selectedCountry &&
             dataSource.showCheckmarkInList ? .checkmark : .none
         cell.separatorInset = .zero
@@ -184,6 +190,7 @@ extension CountryPickerViewController {
             if let color = dataSource.sectionTitleLabelColor {
                 header.textLabel?.textColor = color
             }
+            header.textLabel?.textColor = UIColor.init(rgb: 0x007AFF)
         }
     }
     
@@ -266,9 +273,9 @@ extension CountryPickerViewController: UISearchControllerDelegate {
 class CountryTableViewCell: UITableViewCell {
     
     var flgSize: CGSize = .zero
-    
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.backgroundColor = UIColor.black
         imageView?.frame.size = flgSize
         imageView?.center.y = contentView.center.y
     }
@@ -327,6 +334,7 @@ class CountryPickerViewDataSourceInternal: CountryPickerViewDataSource {
     
     var closeButtonNavigationItem: UIBarButtonItem {
         guard let button = view.dataSource?.closeButtonNavigationItem(in: view) else {
+           
             return UIBarButtonItem(title: "Close", style: .done, target: nil, action: nil)
         }
         return button
